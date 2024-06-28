@@ -1,0 +1,19 @@
+{
+  "name": "@serenityjs/leveldb-darwin-x64",
+  "version": "0.0.0",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "serenityjs-leveldb.darwin-x64.node",
+  "files": [
+    "serenityjs-leveldb.darwin-x64.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/SerenityJS/leveldb"
+}
