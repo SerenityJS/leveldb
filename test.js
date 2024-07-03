@@ -1,3 +1,11 @@
-const { LevelDb } = require(".")
+const { Leveldb } = require(".")
 
-const db = new LevelDb("test")
+const db = Leveldb.open("db")
+
+const key = "TheEnd"
+
+const bytes = Array.from(Buffer.from(key))
+
+const data = db.get(bytes)
+
+console.log(data)

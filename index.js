@@ -310,6 +310,6 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { LevelDb } = nativeBinding
+const { Leveldb } = nativeBinding
 
-module.exports.LevelDb = LevelDb
+module.exports.Leveldb = Leveldb

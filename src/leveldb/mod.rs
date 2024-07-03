@@ -1,3 +1,3 @@
 mod leveldb;
 
-pub use leveldb::LevelDB;
+pub use leveldb::Leveldb;
