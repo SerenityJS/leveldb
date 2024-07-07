@@ -1,7 +1,17 @@
 import test from 'ava'
+import { resolve } from "node:path"
 
-import { sum } from '../index.js'
+import { Leveldb } from '../index.js'
 
-test('sum from native', (t) => {
-  t.is(sum(1, 2), 3)
+const path = resolve("__test__/db")
+
+test('open db path', (t) => {
+  try {
+    const db = Leveldb.open(path)
+    db.close()
+
+    t.pass()
+  } catch (e) {
+    t.fail(e)
+  }
 })
