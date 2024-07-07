@@ -16,7 +16,7 @@ const COMPRESSION_LEVEL: u8 = CompressionLevel::DefaultLevel as u8;
 
 #[napi]
 impl Leveldb {
-  #[napi]
+  #[napi(ts_return_type="Leveldb")]
   /**
    * Open a database
    * @param path The path to the database
@@ -102,6 +102,26 @@ impl Leveldb {
     // Put the key and value into the database
     // Catch any errors and return them as a js error
     match self.rusty_leveldb.put(key_bytes, value_bytes) {
+      Ok(_) => (),
+      Err(e) => return Err(Error::new(GenericFailure, e.to_string()))
+    }
+
+    // Return nothing if successful
+    return Ok(())
+  }
+
+  #[napi]
+  /**
+   * Delete a key from the database
+   * @param key The key to delete
+  */
+  pub fn delete(&mut self, key: Buffer) -> Result<()> {
+    // Turn the key into a byte array reference
+    let bytes = key.as_ref();
+
+    // Delete the key from the database
+    // Catch any errors and return them as a js error
+    match self.rusty_leveldb.delete(bytes) {
       Ok(_) => (),
       Err(e) => return Err(Error::new(GenericFailure, e.to_string()))
     }

@@ -25,4 +25,9 @@ export class Leveldb {
   * @param value The value to put into the database
   */
   put(key: Buffer, value: Buffer): void
+  /**
+  * Delete a key from the database
+  * @param key The key to delete
+  */
+  delete(key: Buffer): void
 }
