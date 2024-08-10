@@ -5,7 +5,12 @@
   "types": "index.d.ts",
   "napi": {
     "name": "serenityjs-leveldb",
-    "triples": {}
+    "triples": {
+      "defaults": true,
+      "additional": [
+        "aarch64-darwin"
+      ]
+    }
   },
   "license": "MIT",
   "devDependencies": {
