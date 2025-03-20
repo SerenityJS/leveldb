@@ -70,6 +70,19 @@ impl Leveldb {
 
   #[napi]
   /**
+   * Flushes the database, ensuring all writes are persisted to disk.
+  */
+  pub fn flush(&mut self) -> Result<()> {
+    // Flush the database
+    // Catch any errors and return them as a js error
+    match self.rusty_leveldb.flush() {
+      Ok(_) => Ok(()),
+      Err(e) => return Err(Error::new(GenericFailure, e.to_string()))
+    }
+  }
+
+  #[napi]
+  /**
    * Get a value from the database
    * @param key The key to get the value for
    * @returns The value for the key
