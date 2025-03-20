@@ -14,6 +14,10 @@ export class Leveldb {
   */
   close(): void
   /**
+  * Flushes the database, ensuring all writes are persisted to disk.
+  */
+  flush(): void
+  /**
   * Get a value from the database
   * @param key The key to get the value for
   * @returns The value for the key
