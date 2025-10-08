@@ -98,7 +98,7 @@ impl Leveldb {
     };
 
     // Return the value as a js buffer
-    return Ok(Buffer::from(value))
+    return Ok(Buffer::from(value.to_vec()))
   }
 
   #[napi]
