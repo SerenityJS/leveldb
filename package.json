@@ -4,8 +4,8 @@
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "serenityjs-leveldb",
-    "triples": {
+    "binaryName": "serenityjs-leveldb",
+    "targets": {
       "defaults": true,
       "additional": [
         "aarch64-darwin"
