@@ -1,0 +1,19 @@
+{
+  "name": "@serenityjs/leveldb-android-arm64",
+  "version": "1.2.0",
+  "os": [
+    "android"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "serenityjs-leveldb.android-arm64.node",
+  "files": [
+    "serenityjs-leveldb.android-arm64.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/SerenityJS/leveldb"
+}
