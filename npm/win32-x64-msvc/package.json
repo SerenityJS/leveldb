@@ -1,6 +1,6 @@
 {
   "name": "@serenityjs/leveldb-win32-x64-msvc",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "os": [
     "win32"
   ],
