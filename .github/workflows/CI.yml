@@ -1,24 +1,28 @@
 name: CI
+
 env:
   DEBUG: napi:*
   APP_NAME: serenityjs-leveldb
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
+
 permissions:
   contents: write
   id-token: write
-'on':
+
+on:
   push:
     branches:
       - main
-    tags-ignore:
-      - '**'
+    tags:
+      - "v*.*.*"
+      - "*.*.*"
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - LICENSE
-      - '**/*.gitignore'
+      - "**/*.gitignore"
       - .editorconfig
       - docs/**
-  pull_request: null
+  pull_request:
 
 jobs:
   build:
@@ -38,12 +42,10 @@ jobs:
             target: x86_64-pc-windows-msvc
             build: yarn build --target x86_64-pc-windows-msvc
 
-          # Linux x64, now built directly on ubuntu-latest (no Docker)
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             build: yarn build --target x86_64-unknown-linux-gnu
 
-          # Android ARM64 (v8a)
           - host: ubuntu-latest
             target: aarch64-linux-android
             build: |
@@ -52,8 +54,12 @@ jobs:
 
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -106,13 +112,18 @@ jobs:
           cache: yarn
           architecture: x86
 
-      # Docker build step is now effectively unused, since no matrix entry has `docker`
       - name: Build in docker
         uses: addnab/docker-run-action@v3
         if: ${{ matrix.settings.docker }}
         with:
           image: ${{ matrix.settings.docker }}
-          options: '--user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build'
+          options: >-
+            --user 0:0
+            -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db
+            -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache
+            -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index
+            -v ${{ github.workspace }}:/build
+            -w /build
           run: ${{ matrix.settings.build }}
 
       - name: Build
@@ -129,8 +140,7 @@ jobs:
 
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
-    needs:
-      - build
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
@@ -141,12 +151,15 @@ jobs:
             target: aarch64-apple-darwin
           - host: windows-latest
             target: x86_64-pc-windows-msvc
-        node:
-          - '18'
-          - '20'
+        node: ["18", "20"]
+
     runs-on: ${{ matrix.settings.host }}
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -173,17 +186,19 @@ jobs:
 
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
-    needs:
-      - build
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
-        node:
-          - '18'
-          - '20'
+        node: ["18", "20"]
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -213,8 +228,15 @@ jobs:
     needs:
       - test-macOS-windows-binding
       - test-linux-x64-gnu-binding
+
+    # Only publish on tag pushes (even though CI also runs on main)
+    if: startsWith(github.ref, 'refs/tags/')
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -238,18 +260,24 @@ jobs:
         shell: bash
 
       - name: Publish
+        working-directory: ./npm
         run: |
           npm config set provenance true
-          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
-          then
+
+          REF="${GITHUB_REF_NAME}"
+          VERSION="${REF#v}"  # strip leading "v" if present
+
+          echo "Publishing from tag: ${REF} (version parsed: ${VERSION})"
+
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
+          elif [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+[-].+ ]]; then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             npm publish --tag next --access public
           else
-            echo "Not a release, skipping publish"
+            echo "Tag is not a semver release: $REF"
+            exit 1
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
