@@ -12,6 +12,7 @@ miniz_oxide = "0.7.4"
 napi = { version = "3.3.0", default-features = false, features = ["napi4"] }
 napi-derive = "3.2.5"
 rusty-leveldb = "4.0.0"
+once_cell = "1"
 
 [build-dependencies]
 napi-build = "2.0.1"
