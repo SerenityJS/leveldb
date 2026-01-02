@@ -37,12 +37,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SerenityJS/leveldb.git"
-  },
-  "optionalDependencies": {
-    "@serenityjs/leveldb-darwin-x64": "1.5.6",
-    "@serenityjs/leveldb-darwin-arm64": "1.5.6",
-    "@serenityjs/leveldb-win32-x64-msvc": "1.5.6",
-    "@serenityjs/leveldb-linux-x64-gnu": "1.5.6",
-    "@serenityjs/leveldb-android-arm64": "1.5.6"
   }
 }
