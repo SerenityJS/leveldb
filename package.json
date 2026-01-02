@@ -1,7 +1,7 @@
 {
-  "name": "leveldb-upgrade",
-  "version": "1.0.0",
-  "description": "Template project for writing node package with napi-rs",
+  "name": "@serenityjs/leveldb",
+  "version": "1.5.9",
+  "description": "LevelDB bindings for Nodejs.",
   "main": "index.js",
   "repository": {
     "type": "git",
