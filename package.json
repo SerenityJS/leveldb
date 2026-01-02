@@ -1,6 +1,6 @@
 {
   "name": "@serenityjs/leveldb",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
