@@ -15,5 +15,8 @@
   "engines": {
     "node": ">= 10"
   },
-  "repository": "https://github.com/SerenityJS/leveldb"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SerenityJS/leveldb.git"
+  }
 }
