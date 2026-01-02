@@ -1,6 +1,6 @@
 {
   "name": "@serenityjs/leveldb-darwin-x64",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "os": [
     "darwin"
   ],
