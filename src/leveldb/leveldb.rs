@@ -212,6 +212,24 @@ impl Leveldb {
       .delete(bytes)
       .map_err(|e| Error::new(GenericFailure, e.to_string()))
   }
+
+  #[napi]
+  /**
+   * Get multiple values from the database in a single call.
+   * @param keys The keys to retrieve values for
+   * @returns An array of values, with null for keys that do not exist
+   */
+  pub fn get_many(&mut self, keys: Vec<Buffer>) -> Result<Vec<Option<Buffer>>> {
+    let db = self.db_mut()?;
+    let mut results = Vec::with_capacity(keys.len());
+
+    for key in &keys {
+      let value = db.get(key.as_ref()).map(|v| Buffer::from(v.to_vec()));
+      results.push(value);
+    }
+
+    Ok(results)
+  }
 }
 
 impl Drop for Leveldb {

@@ -25,4 +25,9 @@ export declare class Leveldb {
    * @param key The key to delete
    */
   delete(key: Buffer): void
+  /** * Get multiple values from the database in a single call.
+   * @param keys The keys to retrieve values for
+   * @returns An array of values, with null for keys that do not exist
+   */
+  getMany(keys: Array<Buffer>): Array<Buffer | undefined | null>
 }
