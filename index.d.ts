@@ -4,6 +4,7 @@ export declare class Leveldb {
   static open(path: string): Leveldb
   get(key: Buffer): Promise<Buffer | null>
   put(key: Buffer, value: Buffer): Promise<void>
+  delete(key: Buffer): Promise<void>
   getWorkerThreadId(): Promise<string>
   close(): Promise<void>
 }
