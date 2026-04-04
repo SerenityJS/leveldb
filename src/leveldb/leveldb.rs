@@ -112,6 +112,14 @@ impl Leveldb {
   }
 
   #[napi]
+  pub async fn delete(&self, key: Buffer) -> Result<()> {
+    let tx = self.worker.tx.clone();
+    let key = key.to_vec();
+
+    request(tx, move |resp| DbCommand::Delete { key, resp }).await
+  }
+
+  #[napi]
   pub async fn get_worker_thread_id(&self) -> Result<String> {
     let tx = self.worker.tx.clone();
     request(tx, move |resp| DbCommand::GetWorkerThreadId { resp }).await

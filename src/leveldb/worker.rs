@@ -28,6 +28,11 @@ pub fn run_db_worker(path: String, rx: mpsc::Receiver<DbCommand>) {
         let _ = resp.send(result);
       }
 
+      DbCommand::Delete { key, resp } => {
+        let result = db.delete(&key).map_err(|e| e.to_string());
+        let _ = resp.send(result);
+      }
+
       DbCommand::GetWorkerThreadId { resp } => {
         let id = format!("{:?}", thread::current().id());
         let _ = resp.send(Ok(id));

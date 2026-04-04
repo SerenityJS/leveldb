@@ -15,6 +15,10 @@ pub enum DbCommand {
     value: Vec<u8>,
     resp: mpsc::Sender<DbResult<()>>,
   },
+  Delete {
+    key: Vec<u8>,
+    resp: mpsc::Sender<DbResult<()>>,
+  },
   GetWorkerThreadId {
     resp: mpsc::Sender<DbResult<String>>,
   },
