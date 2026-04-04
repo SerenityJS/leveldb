@@ -1,7 +1,7 @@
 mod leveldb;
-mod types;
 mod options;
-mod worker;
 mod requests;
+mod types;
+mod worker;
 
 pub use leveldb::Leveldb;
